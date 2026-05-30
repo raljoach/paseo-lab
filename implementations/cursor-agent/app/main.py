@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import sys
 from pathlib import Path
-from commands.parser import parse_command
+import argparse
 
 # Allow imports from project root when running as a script.
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -9,10 +9,9 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from composition.itinerary_builder import ItineraryBuilder
-from commands.parser import parse_command
 from models.itinerary import FastItinerary
 from models.scoring import ScoredItem
-
+from constraints.models import TripConstraints
 
 def _format_score(scored: ScoredItem) -> str:
     parts = [f"score {scored.score:.2f}"]
@@ -84,23 +83,45 @@ def format_itinerary(itinerary: FastItinerary) -> str:
 
     return "\n".join(lines)
 
+def parse_args(argv: list[str]) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Paseo Itinerary Generator")
 
+    parser.add_argument(
+        "--destination",
+        required=True,
+        help="Travel destination (e.g. Andorra)"
+    )
+
+    parser.add_argument(
+        "--profile",
+        default="default",
+        help="Travel profile: budget | luxury | adventure | foodie | default"
+    )
+
+    parser.add_argument(
+        "--budget",
+        type=float,
+        default=None,
+        help="Max total budget for trip"
+    )
+
+    return parser.parse_args(argv)
 def main(argv: list[str] | None = None) -> int:
-    args = argv if argv is not None else sys.argv[1:]
-    if not args:
-        print('Usage: python app/main.py "Paseo Andorra"', file=sys.stderr)
-        return 1
+    args = parse_args(argv or sys.argv[1:])
 
-    command = " ".join(args)
-    try:
-        cmd = parse_command(command)
-        print(f"Profile: {cmd.profile}")
-        print(f"Destination: {cmd.destination}")
-        builder = ItineraryBuilder(profile=cmd.profile)
-        itinerary = builder.build(cmd.destination)
-    except ValueError as exc:
-        print(f"Error: {exc}", file=sys.stderr)
-        return 1
+    print(f"Profile: {args.profile}")
+    print(f"Destination: {args.destination}")
+
+    constraints = TripConstraints(
+        max_budget=args.budget
+    )
+
+    builder = ItineraryBuilder(profile=args.profile)
+
+    itinerary = builder.build(
+        args.destination,
+        constraints=constraints
+    )
 
     print(format_itinerary(itinerary))
     return 0

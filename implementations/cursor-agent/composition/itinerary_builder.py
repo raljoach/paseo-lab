@@ -11,7 +11,8 @@ from strategies import (
 )
 from profiles.loader import load_profile
 from profiles.apply import apply_profile
-
+from constraints.models import TripConstraints
+from constraints.budget import filter_by_budget
 
 class ItineraryBuilder:
     """Composes a FAST itinerary from connector data and strategies."""
@@ -31,19 +32,20 @@ class ItineraryBuilder:
         self._stay_strategy = StayStrategy(weights=weights["stays"])
         self._transport_strategy = TransportStrategy(weights=weights["transportation"])
 
-    def build(self, destination: str) -> FastItinerary:
+    def build(self, destination: str, constraints=None):
+        constraints = constraints or TripConstraints()
         return FastItinerary(
             destination=destination,
-            flights=self._flight_strategy.select(
+            flights = filter_by_budget(self._flight_strategy.select(
                 self._connector.flights(), destination, limit=3
-            ),
-            activities=self._activity_strategy.select(
+            ), constraints.max_budget),
+            activities=filter_by_budget(self._activity_strategy.select(
                 self._connector.activities(), destination, limit=5
-            ),
-            stays=self._stay_strategy.select(
+            ), constraints.max_budget),
+            stays=filter_by_budget(self._stay_strategy.select(
                 self._connector.stays(), destination, limit=3
-            ),
-            transportation=self._transport_strategy.select(
+            ), constraints.max_budget),
+            transportation=filter_by_budget(self._transport_strategy.select(
                 self._connector.transportation(), destination, limit=4
-            ),
+            ), constraints.max_budget),
         )
