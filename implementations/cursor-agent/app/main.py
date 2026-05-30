@@ -10,6 +10,17 @@ if str(PROJECT_ROOT) not in sys.path:
 from composition.itinerary_builder import ItineraryBuilder
 from commands.parser import parse_command
 from models.itinerary import FastItinerary
+from models.scoring import ScoredItem
+
+
+def _format_score(scored: ScoredItem) -> str:
+    parts = [f"score {scored.score:.2f}"]
+    if scored.breakdown:
+        breakdown = ", ".join(
+            f"{field} {value:.2f}" for field, value in scored.breakdown.items()
+        )
+        parts.append(f"({breakdown})")
+    return " — ".join(parts)
 
 
 def format_itinerary(itinerary: FastItinerary) -> str:
@@ -22,42 +33,50 @@ def format_itinerary(itinerary: FastItinerary) -> str:
     ]
 
     if itinerary.flights:
-        for item in itinerary.flights:
+        for scored in itinerary.flights:
+            item = scored.item
             lines.append(
                 f"  • {item.airline}: {item.origin} → {item.destination} "
-                f"({item.departure}–{item.arrival}) — ${item.price_usd:.0f}"
+                f"({item.departure}–{item.arrival}) — ${item.price_usd:.0f} "
+                f"[{_format_score(scored)}]"
             )
     else:
         lines.append("  (none found)")
 
     lines.extend(["", "Activities (A)", "-" * 20])
     if itinerary.activities:
-        for item in itinerary.activities:
+        for scored in itinerary.activities:
+            item = scored.item
             lines.append(
                 f"  • {item.name} [{item.category}] — "
-                f"{item.duration_hours:g}h — ${item.price_usd:.0f}"
+                f"{item.duration_hours:g}h — ${item.price_usd:.0f} "
+                f"[{_format_score(scored)}]"
             )
     else:
         lines.append("  (none found)")
 
     lines.extend(["", "Stays (S)", "-" * 20])
     if itinerary.stays:
-        for item in itinerary.stays:
+        for scored in itinerary.stays:
+            item = scored.item
             total = item.nights * item.price_per_night_usd
             lines.append(
                 f"  • {item.name} — {item.nights} night(s) @ "
                 f"${item.price_per_night_usd:.0f}/night — "
-                f"rating {item.rating:.1f} — est. ${total:.0f}"
+                f"rating {item.rating:.1f} — est. ${total:.0f} "
+                f"[{_format_score(scored)}]"
             )
     else:
         lines.append("  (none found)")
 
     lines.extend(["", "Transportation (T)", "-" * 20])
     if itinerary.transportation:
-        for item in itinerary.transportation:
+        for scored in itinerary.transportation:
+            item = scored.item
             lines.append(
                 f"  • {item.mode}: {item.route} — "
-                f"{item.duration_minutes} min — ${item.price_usd:.0f}"
+                f"{item.duration_minutes} min — ${item.price_usd:.0f} "
+                f"[{_format_score(scored)}]"
             )
     else:
         lines.append("  (none found)")

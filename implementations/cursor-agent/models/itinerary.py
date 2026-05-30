@@ -1,5 +1,7 @@
 from dataclasses import dataclass, field
 
+from models.scoring import ScoredItem
+
 
 @dataclass(frozen=True)
 class Flight:
@@ -41,7 +43,7 @@ class Transportation:
 @dataclass
 class FastItinerary:
     destination: str
-    flights: list[Flight] = field(default_factory=list)
-    activities: list[Activity] = field(default_factory=list)
-    stays: list[Stay] = field(default_factory=list)
-    transportation: list[Transportation] = field(default_factory=list)
+    flights: list[ScoredItem[Flight]] = field(default_factory=list)
+    activities: list[ScoredItem[Activity]] = field(default_factory=list)
+    stays: list[ScoredItem[Stay]] = field(default_factory=list)
+    transportation: list[ScoredItem[Transportation]] = field(default_factory=list)
