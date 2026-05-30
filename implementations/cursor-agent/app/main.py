@@ -9,6 +9,7 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from composition.itinerary_builder import ItineraryBuilder
+from optimizer.itinerary_optimizer import ItineraryOptimizer
 from models.itinerary import FastItinerary
 from models.scoring import ScoredItem
 from constraints.models import TripConstraints
@@ -117,10 +118,22 @@ def main(argv: list[str] | None = None) -> int:
     )
 
     builder = ItineraryBuilder(profile=args.profile)
+    optimizer = ItineraryOptimizer()
 
-    itinerary = builder.build(
+    candidates = builder.build(
         args.destination,
-        constraints=constraints
+        constraints=constraints,
+    )
+
+    budget = args.budget if args.budget is not None else float("inf")
+    optimized = optimizer.optimize(candidates, budget)
+
+    itinerary = FastItinerary(
+        destination=args.destination,
+        flights=optimized.flights,
+        activities=optimized.activities,
+        stays=optimized.stays,
+        transportation=optimized.transportation,
     )
 
     print(format_itinerary(itinerary))
