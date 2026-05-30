@@ -1,0 +1,18 @@
+{
+    "flights": {
+      "price_usd": 0.2,
+      "duration_hours": 0.2
+    },
+    "activities": {
+      "price_usd": 0.1,
+      "duration_hours": 0.3
+    },
+    "stays": {
+      "price_per_night_usd": 0.1,
+      "rating": 0.9
+    },
+    "transportation": {
+      "price_usd": 0.2,
+      "duration_minutes": 0.2
+    }
+  }
