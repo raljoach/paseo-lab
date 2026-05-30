@@ -5,8 +5,7 @@
     },
     "activities": {
       "price_usd": 0.2,
-      "duration_hours": 0.3,
-      "rating": 0.5
+      "duration_hours": 0.3
     },
     "stays": {
       "price_per_night_usd": 0.5,
