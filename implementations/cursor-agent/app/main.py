@@ -113,8 +113,7 @@ def main(argv: list[str] | None = None) -> int:
     print(f"Destination: {args.destination}")
 
     constraints = TripConstraints(
-        max_budget=args.budget,
-        max_days=args.days
+        max_budget=args.budget
     )
 
     builder = ItineraryBuilder(profile=args.profile)
