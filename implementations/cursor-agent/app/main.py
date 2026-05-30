@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import sys
 from pathlib import Path
+from commands.parser import parse_command
 
 # Allow imports from project root when running as a script.
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -92,12 +93,15 @@ def main(argv: list[str] | None = None) -> int:
 
     command = " ".join(args)
     try:
-        destination = parse_command(command)
+        cmd = parse_command(command)
+        print(f"Profile: {cmd.profile}")
+        print(f"Destination: {cmd.destination}")
+        builder = ItineraryBuilder(profile=cmd.profile)
+        itinerary = builder.build(cmd.destination)
     except ValueError as exc:
         print(f"Error: {exc}", file=sys.stderr)
         return 1
 
-    itinerary = ItineraryBuilder().build(destination)
     print(format_itinerary(itinerary))
     return 0
 

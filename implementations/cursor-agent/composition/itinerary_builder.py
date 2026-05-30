@@ -9,6 +9,8 @@ from strategies import (
     StayStrategy,
     TransportStrategy,
 )
+from profiles.loader import load_profile
+from profiles.apply import apply_profile
 
 
 class ItineraryBuilder:
@@ -18,9 +20,12 @@ class ItineraryBuilder:
         self,
         connector: MockJsonConnector | None = None,
         weights_path: Path | None = None,
+        profile: str = "default",
     ) -> None:
         self._connector = connector or MockJsonConnector()
         weights = load_scoring_weights(weights_path)
+        profile_weights = load_profile(profile)
+        weights = apply_profile(weights, profile_weights)
         self._flight_strategy = FlightStrategy(weights=weights["flights"])
         self._activity_strategy = ActivityStrategy(weights=weights["activities"])
         self._stay_strategy = StayStrategy(weights=weights["stays"])
