@@ -32,6 +32,9 @@ class ItineraryOptimizer:
         )
 
     def optimize(self, candidates, constraints: TripConstraints):
+        if not candidates.flights:
+            raise ValueError("Cannot build itinerary: no flights available")
+            
         budget = constraints.max_budget or float("inf")
         items = self._flatten(candidates)
 
@@ -39,13 +42,6 @@ class ItineraryOptimizer:
 
         selected = []
         remaining = budget
-
-        grouped = {
-            "flights": [],
-            "activities": [],
-            "stays": [],
-            "transportation": []
-        }
 
         for item in items:
             cost = getattr(item.item, "price_usd", 0)

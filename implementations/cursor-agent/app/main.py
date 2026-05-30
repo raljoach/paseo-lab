@@ -126,7 +126,7 @@ def main(argv: list[str] | None = None) -> int:
 
     itinerary = optimizer.optimize(
         candidates,
-        constraints=constraints
+        constraints
     )
 
     print(format_itinerary(itinerary))
