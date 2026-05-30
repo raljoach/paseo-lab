@@ -1,0 +1,37 @@
+[
+  {
+    "name": "Caldea Thermal Spa",
+    "destination": "Andorra",
+    "category": "wellness",
+    "duration_hours": 3,
+    "price_usd": 45
+  },
+  {
+    "name": "Grandvalira Ski Day Pass",
+    "destination": "Andorra",
+    "category": "outdoor",
+    "duration_hours": 8,
+    "price_usd": 72
+  },
+  {
+    "name": "Andorra la Vella Old Town Walk",
+    "destination": "Andorra",
+    "category": "culture",
+    "duration_hours": 2,
+    "price_usd": 0
+  },
+  {
+    "name": "Tobotronc Alpine Coaster",
+    "destination": "Andorra",
+    "category": "adventure",
+    "duration_hours": 1.5,
+    "price_usd": 28
+  },
+  {
+    "name": "Matterhorn Glacier Trail",
+    "destination": "Zermatt",
+    "category": "outdoor",
+    "duration_hours": 5,
+    "price_usd": 35
+  }
+]

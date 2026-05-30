@@ -1,0 +1,34 @@
+[
+  {
+    "airline": "SkyEurope",
+    "origin": "Barcelona",
+    "destination": "Andorra",
+    "departure": "2026-06-10 08:30",
+    "arrival": "2026-06-10 09:45",
+    "price_usd": 189
+  },
+  {
+    "airline": "Pyrenees Air",
+    "origin": "Toulouse",
+    "destination": "Andorra",
+    "departure": "2026-06-10 11:00",
+    "arrival": "2026-06-10 12:10",
+    "price_usd": 210
+  },
+  {
+    "airline": "Iberia Express",
+    "origin": "Madrid",
+    "destination": "Andorra",
+    "departure": "2026-06-10 07:15",
+    "arrival": "2026-06-10 08:40",
+    "price_usd": 245
+  },
+  {
+    "airline": "Alpine Connect",
+    "origin": "Geneva",
+    "destination": "Zermatt",
+    "departure": "2026-06-12 09:00",
+    "arrival": "2026-06-12 10:05",
+    "price_usd": 175
+  }
+]

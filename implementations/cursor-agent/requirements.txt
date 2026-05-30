@@ -1,0 +1,2 @@
+# Milestone 1 uses the Python standard library only.
+# Future milestones may add FastAPI, SQLite drivers, and LLM clients here.

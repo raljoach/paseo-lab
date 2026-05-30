@@ -1,0 +1,30 @@
+[
+  {
+    "name": "Hotel Plaza Andorra",
+    "destination": "Andorra",
+    "nights": 3,
+    "price_per_night_usd": 145,
+    "rating": 4.5
+  },
+  {
+    "name": "Sport Hotel Hermitage & Spa",
+    "destination": "Andorra",
+    "nights": 3,
+    "price_per_night_usd": 220,
+    "rating": 4.8
+  },
+  {
+    "name": "Pierre & Vacances Andorra",
+    "destination": "Andorra",
+    "nights": 3,
+    "price_per_night_usd": 98,
+    "rating": 4.2
+  },
+  {
+    "name": "Hotel Monte Rosa",
+    "destination": "Zermatt",
+    "nights": 2,
+    "price_per_night_usd": 310,
+    "rating": 4.7
+  }
+]

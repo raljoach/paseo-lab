@@ -1,0 +1,37 @@
+[
+  {
+    "mode": "shuttle",
+    "route": "Barcelona El Prat → Andorra la Vella",
+    "destination": "Andorra",
+    "duration_minutes": 195,
+    "price_usd": 35
+  },
+  {
+    "mode": "rental car",
+    "route": "Toulouse Airport → Andorra",
+    "destination": "Andorra",
+    "duration_minutes": 150,
+    "price_usd": 89
+  },
+  {
+    "mode": "bus",
+    "route": "Andorra la Vella ↔ Grandvalira",
+    "destination": "Andorra",
+    "duration_minutes": 45,
+    "price_usd": 8
+  },
+  {
+    "mode": "cable car",
+    "route": "Encamp → Funicamp lift base",
+    "destination": "Andorra",
+    "duration_minutes": 15,
+    "price_usd": 12
+  },
+  {
+    "mode": "train",
+    "route": "Zermatt village ↔ Gornergrat",
+    "destination": "Zermatt",
+    "duration_minutes": 33,
+    "price_usd": 88
+  }
+]
