@@ -38,3 +38,28 @@ Running:
 python app/main.py "Paseo Andorra"
 
 produces a FAST itinerary successfully.
+
+## Milestone 2
+
+Implement strategy-driven itinerary selection.
+
+Requirements:
+
+* Each FAST category must use a strategy class
+* Strategies must rank candidate options
+* Strategies should support configurable scoring
+* Use weighted linear scoring initially
+
+Example:
+score =
+price_weight * normalized_price +
+rating_weight * normalized_rating
+
+The app should:
+
+* evaluate multiple options
+* choose best candidates
+* print strategy scores
+
+Goal:
+Transform Paseo into a modular decision engine.
