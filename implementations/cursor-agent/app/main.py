@@ -121,19 +121,12 @@ def main(argv: list[str] | None = None) -> int:
     optimizer = ItineraryOptimizer()
 
     candidates = builder.build(
-        args.destination,
-        constraints=constraints,
+        args.destination
     )
 
-    budget = args.budget if args.budget is not None else float("inf")
-    optimized = optimizer.optimize(candidates, budget)
-
-    itinerary = FastItinerary(
-        destination=args.destination,
-        flights=optimized.flights,
-        activities=optimized.activities,
-        stays=optimized.stays,
-        transportation=optimized.transportation,
+    itinerary = optimizer.optimize(
+        candidates,
+        constraints=constraints
     )
 
     print(format_itinerary(itinerary))
