@@ -2,7 +2,7 @@ from pathlib import Path
 
 from config import load_scoring_weights
 from connectors.mock_json import MockJsonConnector
-from models.itinerary import FastItinerary
+from models.candidate_set import CandidateSet
 from strategies import (
     ActivityStrategy,
     FlightStrategy,
@@ -34,9 +34,8 @@ class ItineraryBuilder:
 
     def build(self, destination: str, constraints=None):
         constraints = constraints or TripConstraints()
-        return FastItinerary(
-            destination=destination,
-            flights = filter_by_budget(self._flight_strategy.select(
+        return CandidateSet(
+            flights=filter_by_budget(self._flight_strategy.select(
                 self._connector.flights(), destination, limit=3
             ), constraints.max_budget),
             activities=filter_by_budget(self._activity_strategy.select(
