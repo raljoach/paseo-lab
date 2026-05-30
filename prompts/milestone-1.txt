@@ -1,0 +1,42 @@
+Read all files in /specs before implementing.
+
+Implement Milestone 1 for Paseo.
+
+Requirements:
+
+* Python application
+
+* CLI interface
+
+* Parse commands like:
+  "Paseo Andorra"
+
+* Generate FAST itinerary
+
+* Use mock JSON datasets
+
+* Modular architecture
+
+* Clean folder structure
+
+* Include README
+
+* Include sample datasets
+
+* Include comments
+
+* Ensure application runs successfully
+
+Expected command:
+
+python app/main.py "Paseo Andorra"
+
+Expected output:
+A FAST itinerary with:
+
+* flights
+* activities
+* stays
+* transportation
+
+Validate all code before completion.
