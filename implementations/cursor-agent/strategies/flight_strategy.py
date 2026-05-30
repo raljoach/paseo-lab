@@ -1,14 +1,23 @@
+from datetime import datetime
+
 from models.itinerary import Flight
-from strategies.base import matches_destination
+from strategies.base import WeightedStrategy
 
 
-class FlightStrategy:
+def _flight_duration_hours(record: dict) -> float:
+    departure = datetime.strptime(str(record["departure"]), "%Y-%m-%d %H:%M")
+    arrival = datetime.strptime(str(record["arrival"]), "%Y-%m-%d %H:%M")
+    return (arrival - departure).total_seconds() / 3600
+
+
+class FlightStrategy(WeightedStrategy[Flight]):
     """Selects and ranks flights for a destination."""
 
-    def select(self, records: list[dict], destination: str, limit: int = 3) -> list[Flight]:
-        matched = [r for r in records if matches_destination(r, destination)]
-        ranked = sorted(matched, key=lambda r: (r.get("price_usd", 0), r.get("departure", "")))
-        return [self._to_model(record) for record in ranked[:limit]]
+    category = "flights"
+    features = {
+        "price_usd": (False, lambda record: float(record.get("price_usd", 0))),
+        "duration_hours": (False, _flight_duration_hours),
+    }
 
     def _to_model(self, record: dict) -> Flight:
         return Flight(

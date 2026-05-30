@@ -1,17 +1,18 @@
 from models.itinerary import Stay
-from strategies.base import matches_destination
+from strategies.base import WeightedStrategy
 
 
-class StayStrategy:
+class StayStrategy(WeightedStrategy[Stay]):
     """Selects and ranks stays for a destination."""
 
-    def select(self, records: list[dict], destination: str, limit: int = 3) -> list[Stay]:
-        matched = [r for r in records if matches_destination(r, destination)]
-        ranked = sorted(
-            matched,
-            key=lambda r: (-float(r.get("rating", 0)), r.get("price_per_night_usd", 0)),
-        )
-        return [self._to_model(record) for record in ranked[:limit]]
+    category = "stays"
+    features = {
+        "price_per_night_usd": (
+            False,
+            lambda record: float(record.get("price_per_night_usd", 0)),
+        ),
+        "rating": (True, lambda record: float(record.get("rating", 0))),
+    }
 
     def _to_model(self, record: dict) -> Stay:
         return Stay(
