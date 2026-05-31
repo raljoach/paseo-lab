@@ -119,7 +119,6 @@ def main(argv: list[str] | None = None) -> int:
     )
 
     print(format_itinerary(itinerary))
-
     return 0
 
 
