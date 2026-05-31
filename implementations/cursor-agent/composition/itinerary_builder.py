@@ -11,6 +11,7 @@ from strategies import (
 )
 from profiles.loader import load_profile
 from profiles.apply import apply_profile
+from models.trip_intent import TripIntent
 
 class ItineraryBuilder:
     """Composes a FAST itinerary from connector data and strategies."""
@@ -30,18 +31,18 @@ class ItineraryBuilder:
         self._stay_strategy = StayStrategy(weights=weights["stays"])
         self._transport_strategy = TransportStrategy(weights=weights["transportation"])
 
-    def build(self, destination: str):
+    def build(self, intent: TripIntent):
         return CandidateSet(
             flights=self._flight_strategy.select(
-            self._connector.flights(), destination, limit=3
+            self._connector.flights(), intent.destination, limit=3
             ),
             activities=self._activity_strategy.select(
-                self._connector.activities(), destination, limit=5
+                self._connector.activities(), intent.destination, limit=5
             ),
             stays=self._stay_strategy.select(
-                self._connector.stays(), destination, limit=3
+                self._connector.stays(), intent.destination, limit=3
             ),
             transportation=self._transport_strategy.select(
-                self._connector.transportation(), destination, limit=4
+                self._connector.transportation(), intent.destination, limit=4
             )
         )
