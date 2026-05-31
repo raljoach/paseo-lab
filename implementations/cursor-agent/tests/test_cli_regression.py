@@ -7,10 +7,7 @@ def test_cli_runs():
         [
             sys.executable,
             "app/main.py",
-            "--destination",
-            "Andorra",
-            "--budget",
-            "300",
+            "cheap trip under 300 to Andorra",
         ],
         capture_output=True,
         text=True,

@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 import sys
 from pathlib import Path
-import argparse
 
 # Allow imports from project root when running as a script.
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -13,6 +12,7 @@ from optimizer.itinerary_optimizer import ItineraryOptimizer
 from models.itinerary import FastItinerary
 from models.scoring import ScoredItem
 from constraints.models import TripConstraints
+from orchestration.orchestrator import Orchestrator
 
 def _format_score(scored: ScoredItem) -> str:
     parts = [f"score {scored.score:.2f}"]
@@ -84,53 +84,45 @@ def format_itinerary(itinerary: FastItinerary) -> str:
 
     return "\n".join(lines)
 
-def parse_args(argv: list[str]) -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Paseo Itinerary Generator")
-
-    parser.add_argument(
-        "--destination",
-        required=True,
-        help="Travel destination (e.g. Andorra)"
-    )
-
-    parser.add_argument(
-        "--profile",
-        default="default",
-        help="Travel profile: budget | luxury | adventure | foodie | default"
-    )
-
-    parser.add_argument(
-        "--budget",
-        type=float,
-        default=None,
-        help="Max total budget for trip"
-    )
-
-    return parser.parse_args(argv)
+    
 def main(argv: list[str] | None = None) -> int:
-    args = parse_args(argv or sys.argv[1:])
+    args = argv if argv is not None else sys.argv[1:]
 
-    print(f"Profile: {args.profile}")
-    print(f"Destination: {args.destination}")
+
+    if not args:
+        print(
+            'Usage: python app/main.py "cheap trip under 500 to Andorra"',
+            file=sys.stderr,
+        )
+        return 1
+
+    raw_text = " ".join(args)
+
+    orchestrator = Orchestrator()
+
+    intent = orchestrator.parse(raw_text)
 
     constraints = TripConstraints(
-        max_budget=args.budget
+        max_budget=intent.budget
     )
 
-    builder = ItineraryBuilder(profile=args.profile)
+    builder = ItineraryBuilder(
+        profile=intent.profile
+    )
+
     optimizer = ItineraryOptimizer()
 
-    candidates = builder.build(
-        args.destination
-    )
+    candidates = builder.build(intent)
 
     itinerary = optimizer.optimize(
         candidates,
-        constraints
+        constraints=constraints,
     )
 
     print(format_itinerary(itinerary))
+
     return 0
+
 
 
 if __name__ == "__main__":
