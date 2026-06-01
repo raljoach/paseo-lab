@@ -33,5 +33,40 @@
     "category": "outdoor",
     "duration_hours": 5,
     "price_usd": 35
+  },
+  {
+    "name": "Andorra Rooftop Night Lounge",
+    "destination": "Andorra",
+    "category": "nightlife",
+    "duration_hours": 4,
+    "price_usd": 30
+  },
+  {
+    "name": "Late Night Tapas Crawl",
+    "destination": "Andorra",
+    "category": "nightlife",
+    "duration_hours": 3,
+    "price_usd": 22
+  },
+  {
+    "name": "Local Food Market Tour",
+    "destination": "Andorra",
+    "category": "culture",
+    "duration_hours": 2,
+    "price_usd": 18
+  },
+  {
+    "name": "Mountain Yoga Retreat",
+    "destination": "Andorra",
+    "category": "wellness",
+    "duration_hours": 2,
+    "price_usd": 40
+  },
+  {
+    "name": "Pyrenees Mountain Hiking",
+    "destination": "Andorra",
+    "category": "adventure",
+    "duration_hours": 6,
+    "price_usd": 55
   }
 ]

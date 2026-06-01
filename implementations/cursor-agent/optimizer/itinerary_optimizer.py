@@ -33,7 +33,9 @@ class ItineraryOptimizer:
 
     def optimize(self, candidates, constraints: TripConstraints):
         if not candidates.flights:
-            raise ValueError("Cannot build itinerary: no flights available")
+            raise ValueError(
+                "No travel results found for destination."
+            )
             
         budget = constraints.max_budget or float("inf")
         items = self._flatten(candidates)

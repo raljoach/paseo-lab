@@ -13,6 +13,7 @@ from models.itinerary import FastItinerary
 from models.scoring import ScoredItem
 from constraints.models import TripConstraints
 from orchestration.orchestrator import Orchestrator
+from memory.service import MemoryService
 
 def _format_score(scored: ScoredItem) -> str:
     parts = [f"score {scored.score:.2f}"]
@@ -100,6 +101,16 @@ def main(argv: list[str] | None = None) -> int:
     orchestrator = Orchestrator()
 
     intent = orchestrator.parse(raw_text)
+    memory_service = MemoryService()
+
+    preferences = memory_service.retrieve(
+        raw_text
+    )
+
+    print("\nRetrieved Preferences:")
+
+    for preference in preferences:
+        print(f"- {preference}")
 
     constraints = TripConstraints(
         max_budget=intent.budget
@@ -110,13 +121,20 @@ def main(argv: list[str] | None = None) -> int:
     )
 
     optimizer = ItineraryOptimizer()
-
-    candidates = builder.build(intent)
-
-    itinerary = optimizer.optimize(
-        candidates,
-        constraints
+    candidates = builder.build(
+        intent,
+        preferences
     )
+
+    try:
+        itinerary = optimizer.optimize(
+            candidates,
+            constraints
+        )
+
+    except ValueError as exc:
+        print(f"\nError: {exc}")
+        return 1
 
     print(format_itinerary(itinerary))
     return 0
