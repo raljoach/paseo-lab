@@ -33,10 +33,11 @@ class WeightedStrategy(ABC, Generic[T]):
         self._weights = weights or load_category_weights(self.category)
 
     def select(
-        self, records: list[dict], destination: str, limit: int = 3
+        self, records: list[dict], #destination: str, 
+        limit: int = 3
     ) -> list[ScoredItem[T]]:
         matched = [
-            record for record in records if matches_destination(record, destination)
+            record for record in records #if matches_destination(record, destination)
         ]
         if not matched:
             return []

@@ -16,9 +16,9 @@ class ActivityStrategy(WeightedStrategy[Activity]):
 
     def _to_model(self, record: dict) -> Activity:
         return Activity(
-            name=str(record["name"]),
-            destination=str(record["destination"]),
-            category=str(record["category"]),
-            duration_hours=float(record["duration_hours"]),
-            price_usd=float(record["price_usd"]),
+            name=record.get("name", "Unknown"),
+            destination=record.get("destination", "Unknown"),
+            category=record.get("category", "Unknown"),
+            duration_hours=record.get("duration_hours"),
+            price_usd=record.get("price_usd"),
         )

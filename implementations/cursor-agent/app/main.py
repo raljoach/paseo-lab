@@ -7,6 +7,7 @@ import sys
 #     sys.path.insert(0, str(PROJECT_ROOT))
 
 from composition.itinerary_builder import ItineraryBuilder
+from connectors.travel_connector import TravelConnector
 from optimizer.itinerary_optimizer import ItineraryOptimizer
 from models.itinerary import FastItinerary
 from models.scoring import ScoredItem
@@ -112,7 +113,7 @@ def main(argv: list[str] | None = None) -> int:
 
     constraints = TripConstraints(max_budget=intent.budget)
 
-    builder = ItineraryBuilder(profile=intent.profile)
+    builder = ItineraryBuilder(connector=TravelConnector(), profile=intent.profile)
 
     optimizer = ItineraryOptimizer()
     candidates = builder.build(intent, preferences)

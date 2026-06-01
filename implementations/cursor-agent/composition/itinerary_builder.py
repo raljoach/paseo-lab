@@ -1,6 +1,6 @@
-import os
 from pathlib import Path
 
+from activities.activity_enricher import ActivityEnricher
 from config import load_scoring_weights
 from connectors.mock_json import MockJsonConnector
 from models.candidate_set import CandidateSet
@@ -33,9 +33,7 @@ class ItineraryBuilder:
         self._activity_strategy = ActivityStrategy(weights=weights["activities"])
         self._stay_strategy = StayStrategy(weights=weights["stays"])
         self._transport_strategy = TransportStrategy(weights=weights["transportation"])
-        self._activity_connector = OpenTripMapConnector(
-            api_key=os.getenv("OPENTRIPMAP_API_KEY", "")
-        )
+        
 
     def build(
         self,
@@ -59,14 +57,15 @@ class ItineraryBuilder:
             query_preferences.append("wellness")
 
         all_preferences = preferences + query_preferences
+        raw_activities = self._connector.activities(intent.destination)
+        enricher = ActivityEnricher()
+        enriched_activities = enricher.enrich(raw_activities)
+        print("[DEBUG] enriched_activities", enriched_activities)
         activities = self._activity_strategy.select(
-            self._activity_connector.activities(
-                intent.destination
-            ),
-            intent.destination,
-            limit=5,
+            enriched_activities#,
+            #intent.destination,
         )
-
+        print("[DEBUG] activities", activities)
         boosted_activities = []
 
         for activity in activities:
@@ -110,6 +109,7 @@ class ItineraryBuilder:
             key=lambda x: x.score,
             reverse=True,
         )
+        print("[DEBUG] boosted_activities", activities)
 
         print("\nAdaptive Activity Scores:")
 
@@ -119,18 +119,18 @@ class ItineraryBuilder:
         return CandidateSet(
             flights=self._flight_strategy.select(
                 self._connector.flights(),
-                intent.destination,
+                #intent.destination,
                 limit=3,
             ),
             activities=activities,
             stays=self._stay_strategy.select(
                 self._connector.stays(),
-                intent.destination,
+                #intent.destination,
                 limit=3,
             ),
             transportation=self._transport_strategy.select(
                 self._connector.transportation(),
-                intent.destination,
+                #intent.destination,
                 limit=4,
             ),
         )

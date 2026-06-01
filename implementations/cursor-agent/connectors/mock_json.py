@@ -19,13 +19,17 @@ class MockJsonConnector:
         return payload if isinstance(payload, list) else []
 
     def flights(self) -> list[dict]:
+        print("[CONNECTOR] MockJsonConnector.flights called")
         return self.load_dataset("flights")
 
     def activities(self) -> list[dict]:
+        print("[CONNECTOR] MockJsonConnector.activities called")
         return self.load_dataset("activities")
 
     def stays(self) -> list[dict]:
+        print("[CONNECTOR] MockJsonConnector.stays called")
         return self.load_dataset("stays")
 
     def transportation(self) -> list[dict]:
+        print("[CONNECTOR] MockJsonConnector.transportation called")
         return self.load_dataset("transportation")
