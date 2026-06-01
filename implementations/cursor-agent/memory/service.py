@@ -3,7 +3,6 @@ import numpy as np
 from embeddings.local_provider import LocalEmbeddingProvider
 from memory.store import MemoryStore
 
-
 class MemoryService:
     def __init__(self):
         self.store = MemoryStore()
