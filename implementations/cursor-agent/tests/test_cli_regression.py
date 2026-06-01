@@ -6,7 +6,7 @@ def test_cli_runs():
     result = subprocess.run(
         [
             sys.executable,
-            "app/main.py",
+            "implementations/cursor-agent/app/main.py",
             "cheap trip under 300 to Andorra",
         ],
         capture_output=True,

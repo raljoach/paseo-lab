@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 import sys
-from pathlib import Path
 
 # Allow imports from project root when running as a script.
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
-if str(PROJECT_ROOT) not in sys.path:
-    sys.path.insert(0, str(PROJECT_ROOT))
+# PROJECT_ROOT = Path(__file__).resolve().parent.parent
+# if str(PROJECT_ROOT) not in sys.path:
+#     sys.path.insert(0, str(PROJECT_ROOT))
 
 from composition.itinerary_builder import ItineraryBuilder
 from optimizer.itinerary_optimizer import ItineraryOptimizer
@@ -13,6 +12,8 @@ from models.itinerary import FastItinerary
 from models.scoring import ScoredItem
 from constraints.models import TripConstraints
 from orchestration.orchestrator import Orchestrator
+from memory.service import MemoryService
+
 
 def _format_score(scored: ScoredItem) -> str:
     parts = [f"score {scored.score:.2f}"]
@@ -100,23 +101,28 @@ def main(argv: list[str] | None = None) -> int:
     orchestrator = Orchestrator()
 
     intent = orchestrator.parse(raw_text)
+    memory_service = MemoryService()
 
-    constraints = TripConstraints(
-        max_budget=intent.budget
-    )
+    preferences = memory_service.retrieve(raw_text)
 
-    builder = ItineraryBuilder(
-        profile=intent.profile
-    )
+    print("\nRetrieved Preferences:")
+
+    for preference in preferences:
+        print(f"- {preference}")
+
+    constraints = TripConstraints(max_budget=intent.budget)
+
+    builder = ItineraryBuilder(profile=intent.profile)
 
     optimizer = ItineraryOptimizer()
+    candidates = builder.build(intent, preferences)
 
-    candidates = builder.build(intent)
+    try:
+        itinerary = optimizer.optimize(candidates, constraints)
 
-    itinerary = optimizer.optimize(
-        candidates,
-        constraints
-    )
+    except ValueError as exc:
+        print(f"\nError: {exc}")
+        return 1
 
     print(format_itinerary(itinerary))
     return 0

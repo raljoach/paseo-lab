@@ -2,6 +2,7 @@ import re
 
 from llm.provider import LLMProvider
 
+
 class MockLLMProvider(LLMProvider):
     def interpret(self, raw_text: str) -> dict:
         text = raw_text.lower()

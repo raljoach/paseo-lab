@@ -1,20 +1,18 @@
 from models.itinerary import FastItinerary
 from constraints.models import TripConstraints
+
+
 class ItineraryOptimizer:
     def _flatten(self, candidates):
         return (
-            candidates.flights +
-            candidates.activities +
-            candidates.stays +
-            candidates.transportation
+            candidates.flights
+            + candidates.activities
+            + candidates.stays
+            + candidates.transportation
         )
+
     def _group(self, selected, candidates):
-        grouped = {
-            "flights": [],
-            "activities": [],
-            "stays": [],
-            "transportation": []
-        }
+        grouped = {"flights": [], "activities": [], "stays": [], "transportation": []}
 
         for item in selected:
             if hasattr(item.item, "airline"):
@@ -27,14 +25,16 @@ class ItineraryOptimizer:
                 grouped["transportation"].append(item)
 
         return FastItinerary(
-            destination=candidates.flights[0].item.destination if candidates.flights else "Unknown",
-            **grouped
+            destination=candidates.flights[0].item.destination
+            if candidates.flights
+            else "Unknown",
+            **grouped,
         )
 
     def optimize(self, candidates, constraints: TripConstraints):
         if not candidates.flights:
-            raise ValueError("Cannot build itinerary: no flights available")
-            
+            raise ValueError("No travel results found for destination.")
+
         budget = constraints.max_budget or float("inf")
         items = self._flatten(candidates)
 
