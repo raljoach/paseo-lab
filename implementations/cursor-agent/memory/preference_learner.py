@@ -1,12 +1,9 @@
 class PreferenceLearner:
-
     def infer_preferences(
         self,
         raw_text: str,
     ) -> list[str]:
-
         text = raw_text.lower()
-
         preferences = []
 
         if "nightlife" in text:
