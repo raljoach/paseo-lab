@@ -35,7 +35,9 @@ class WeightedStrategy(ABC, Generic[T]):
     def select(
         self, records: list[dict], destination: str, limit: int = 3
     ) -> list[ScoredItem[T]]:
-        matched = [record for record in records if matches_destination(record, destination)]
+        matched = [
+            record for record in records if matches_destination(record, destination)
+        ]
         if not matched:
             return []
 
@@ -57,5 +59,4 @@ class WeightedStrategy(ABC, Generic[T]):
         ]
 
     @abstractmethod
-    def _to_model(self, record: dict) -> T:
-        ...
+    def _to_model(self, record: dict) -> T: ...

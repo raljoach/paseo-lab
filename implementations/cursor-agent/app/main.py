@@ -14,6 +14,7 @@ from constraints.models import TripConstraints
 from orchestration.orchestrator import Orchestrator
 from memory.service import MemoryService
 
+
 def _format_score(scored: ScoredItem) -> str:
     parts = [f"score {scored.score:.2f}"]
     if scored.breakdown:
@@ -102,34 +103,22 @@ def main(argv: list[str] | None = None) -> int:
     intent = orchestrator.parse(raw_text)
     memory_service = MemoryService()
 
-    preferences = memory_service.retrieve(
-        raw_text
-    )
+    preferences = memory_service.retrieve(raw_text)
 
     print("\nRetrieved Preferences:")
 
     for preference in preferences:
         print(f"- {preference}")
 
-    constraints = TripConstraints(
-        max_budget=intent.budget
-    )
+    constraints = TripConstraints(max_budget=intent.budget)
 
-    builder = ItineraryBuilder(
-        profile=intent.profile
-    )
+    builder = ItineraryBuilder(profile=intent.profile)
 
     optimizer = ItineraryOptimizer()
-    candidates = builder.build(
-        intent,
-        preferences
-    )
+    candidates = builder.build(intent, preferences)
 
     try:
-        itinerary = optimizer.optimize(
-            candidates,
-            constraints
-        )
+        itinerary = optimizer.optimize(candidates, constraints)
 
     except ValueError as exc:
         print(f"\nError: {exc}")

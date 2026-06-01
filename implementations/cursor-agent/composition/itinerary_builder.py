@@ -14,6 +14,7 @@ from profiles.apply import apply_profile
 from models.trip_intent import TripIntent
 from models.scoring import ScoredItem
 
+
 class ItineraryBuilder:
     """Composes a FAST itinerary from connector data and strategies."""
 
@@ -42,29 +43,18 @@ class ItineraryBuilder:
         query = intent.raw_text.lower()
 
         if "adventure" in query:
-            query_preferences.append(
-                "adventure"
-            )
+            query_preferences.append("adventure")
 
         if "hiking" in query:
-            query_preferences.append(
-                "adventure"
-            )
+            query_preferences.append("adventure")
 
         if "nightlife" in query:
-            query_preferences.append(
-                "nightlife"
-            )
+            query_preferences.append("nightlife")
 
         if "relax" in query:
-            query_preferences.append(
-                "wellness"
-            )
+            query_preferences.append("wellness")
 
-        all_preferences = (
-            preferences +
-            query_preferences
-        )
+        all_preferences = preferences + query_preferences
         activities = self._activity_strategy.select(
             self._connector.activities(),
             intent.destination,
@@ -85,34 +75,19 @@ class ItineraryBuilder:
             for preference in all_preferences:
                 pref = preference.lower()
 
-                if (
-                    "nightlife" in pref
-                    and "nightlife" in category
-                ):
+                if "nightlife" in pref and "nightlife" in category:
                     boost += 0.5
 
-                if (
-                    "relax" in pref
-                    and "wellness" in category
-                ):
+                if "relax" in pref and "wellness" in category:
                     boost += 0.3
 
-                if (
-                    "culture" in pref
-                    and "culture" in category
-                ):
+                if "culture" in pref and "culture" in category:
                     boost += 0.2
-                    
-                if (
-                    "adventure" in pref
-                    and "adventure" in category
-                ):
+
+                if "adventure" in pref and "adventure" in category:
                     boost += 0.4
 
-                if (
-                    "food" in pref
-                    and "culture" in category
-                ):
+                if "food" in pref and "culture" in category:
                     boost += 0.3
 
             boosted_activities.append(
@@ -133,10 +108,7 @@ class ItineraryBuilder:
         print("\nAdaptive Activity Scores:")
 
         for activity in activities:
-            print(
-                f"{activity.item.name} "
-                f"=> {activity.score:.2f}"
-            )
+            print(f"{activity.item.name} " f"=> {activity.score:.2f}")
 
         return CandidateSet(
             flights=self._flight_strategy.select(

@@ -3,6 +3,7 @@ from pathlib import Path
 
 PROFILE_DIR = Path(__file__).parent
 
+
 def load_profile(name: str) -> dict:
     path = PROFILE_DIR / f"{name}.json"
 

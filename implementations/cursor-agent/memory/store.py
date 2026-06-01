@@ -1,6 +1,8 @@
 import json
 from pathlib import Path
+
 MEMORY_PATH = Path("memory/preferences.json")
+
 
 class MemoryStore:
     def load(self) -> list[dict]:

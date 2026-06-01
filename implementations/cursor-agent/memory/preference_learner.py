@@ -7,28 +7,18 @@ class PreferenceLearner:
         preferences = []
 
         if "nightlife" in text:
-            preferences.append(
-                "User likes nightlife"
-            )
+            preferences.append("User likes nightlife")
 
         if "relax" in text:
-            preferences.append(
-                "User prefers relaxing trips"
-            )
+            preferences.append("User prefers relaxing trips")
 
         if "culture" in text:
-            preferences.append(
-                "User enjoys local culture"
-            )
+            preferences.append("User enjoys local culture")
 
         if "food" in text:
-            preferences.append(
-                "User enjoys food experiences"
-            )
+            preferences.append("User enjoys food experiences")
 
         if "adventure" in text:
-            preferences.append(
-                "User likes adventure travel"
-            )
+            preferences.append("User likes adventure travel")
 
         return preferences

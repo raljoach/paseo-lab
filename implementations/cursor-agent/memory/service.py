@@ -3,6 +3,7 @@ import numpy as np
 from embeddings.local_provider import LocalEmbeddingProvider
 from memory.store import MemoryStore
 
+
 class MemoryService:
     def __init__(self):
         self.store = MemoryStore()
@@ -17,10 +18,12 @@ class MemoryService:
                 return
 
         embedding = self.embedding_provider.embed(text)
-        memories.append({
-            "text": text,
-            "embedding": embedding,
-        })
+        memories.append(
+            {
+                "text": text,
+                "embedding": embedding,
+            }
+        )
         self.store.save(memories)
 
     def retrieve(self, query: str, top_k: int = 3) -> list[str]:
@@ -29,9 +32,7 @@ class MemoryService:
         if not memories:
             return []
 
-        query_embedding = np.array(
-            self.embedding_provider.embed(query)
-        )
+        query_embedding = np.array(self.embedding_provider.embed(query))
 
         scored = []
 
@@ -52,17 +53,11 @@ class MemoryService:
 
         scored.sort(reverse=True)
 
-        return [
-            text
-            for _, text in scored[:top_k]
-        ]
+        return [text for _, text in scored[:top_k]]
 
     def _cosine_similarity(
         self,
         a,
         b,
     ):
-        return np.dot(a, b) / (
-            np.linalg.norm(a) *
-            np.linalg.norm(b)
-        )
+        return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))

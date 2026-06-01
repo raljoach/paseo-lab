@@ -10,8 +10,6 @@ def load_scoring_weights(path: Path | None = None) -> dict[str, dict[str, float]
         return json.load(handle)
 
 
-def load_category_weights(
-    category: str, path: Path | None = None
-) -> dict[str, float]:
+def load_category_weights(category: str, path: Path | None = None) -> dict[str, float]:
     weights = load_scoring_weights(path)
     return dict(weights[category])
