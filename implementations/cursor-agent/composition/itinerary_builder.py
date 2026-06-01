@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 from config import load_scoring_weights
@@ -13,7 +14,7 @@ from profiles.loader import load_profile
 from profiles.apply import apply_profile
 from models.trip_intent import TripIntent
 from models.scoring import ScoredItem
-
+from connectors.open_trip_map import OpenTripMapConnector
 
 class ItineraryBuilder:
     """Composes a FAST itinerary from connector data and strategies."""
@@ -32,6 +33,9 @@ class ItineraryBuilder:
         self._activity_strategy = ActivityStrategy(weights=weights["activities"])
         self._stay_strategy = StayStrategy(weights=weights["stays"])
         self._transport_strategy = TransportStrategy(weights=weights["transportation"])
+        self._activity_connector = OpenTripMapConnector(
+            api_key=os.getenv("OPENTRIPMAP_API_KEY", "")
+        )
 
     def build(
         self,
@@ -56,7 +60,9 @@ class ItineraryBuilder:
 
         all_preferences = preferences + query_preferences
         activities = self._activity_strategy.select(
-            self._connector.activities(),
+            self._activity_connector.activities(
+                intent.destination
+            ),
             intent.destination,
             limit=5,
         )
